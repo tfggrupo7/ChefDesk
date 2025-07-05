@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { IRoles } from '../../interfaces/iroles.interfaces';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import { IRoles } from '../../interfaces/iroles.interfaces';
 export class RolesService {
 
   private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/api/roles';
+  private url: string = `${environment.apiUrl}/api/roles`;
 
   getRoles(): Promise<IRoles[]> {
 

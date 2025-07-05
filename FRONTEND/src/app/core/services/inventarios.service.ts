@@ -2,12 +2,13 @@ import { Injectable, inject } from '@angular/core';
 import { IInventarios } from '../../interfaces/iinventarios.interfaces';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class InventariosService {
   private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/api/inventarios';
+  private url: string = `${environment.apiUrl}/api/inventarios`;
 
   getInventarios(): Promise<IInventarios[]> {
     return lastValueFrom(this.httpClient.get<IInventarios[]>(this.url));

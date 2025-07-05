@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { IIngredientes } from '../../interfaces/iingredientes.interfaces';
 import { lastValueFrom } from 'rxjs';
 import { IInventarioResumen } from '../../interfaces/iinventarioresumen.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +11,7 @@ import { IInventarioResumen } from '../../interfaces/iinventarioresumen.interfac
 export class IngredientesService {
 
   private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/api/ingredientes';
+  private url: string = `${environment.apiUrl}/api/ingredientes`;
   private _totalItems = 0;
 
   get totalItems() { return this._totalItems; }

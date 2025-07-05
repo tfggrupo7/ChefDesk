@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 import { LoginResponse } from '../../interfaces/login-response.interfaces';
 import { jwtDecode } from 'jwt-decode';
+import { environment } from '../../../environments/environment';
 
 
 
@@ -28,18 +29,18 @@ export class AuthService {
   async login(email: string, password: string): Promise<LoginResponse> {
     const body = { email, password };
     const response = await lastValueFrom(
-      this.httpClient.post<LoginResponse>('http://localhost:3000/api/empleados/login', body, { observe: 'response' })
+      this.httpClient.post<LoginResponse>(`${environment.apiUrl}/api/empleados/login`, body, { observe: 'response' })
     );
     return response.body as LoginResponse;
   }
   recuperarContrasena(email: string): Promise<void> {
-    return lastValueFrom(this.httpClient.post<void>('http://localhost:3000/api/empleados/recuperar-contrasena', { email }));
+    return lastValueFrom(this.httpClient.post<void>(`${environment.apiUrl}/api/empleados/recuperar-contrasena`, { email }));
   }
   actualizarContrasena(token: string, nuevaContrasena: string): Promise<any> {
   const headers = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  return lastValueFrom(this.httpClient.post(`http://localhost:3000/api/empleados/restablecer-contrasena/${token}`, { nuevaContrasena }, { headers }));
+  return lastValueFrom(this.httpClient.post(`${environment.apiUrl}/api/empleados/restablecer-contrasena/${token}`, { nuevaContrasena }, { headers }));
 }
 
   logout(): void {

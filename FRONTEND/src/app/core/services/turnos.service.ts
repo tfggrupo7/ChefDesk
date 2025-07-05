@@ -8,6 +8,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ITurnos } from '../../interfaces/iturnos.interfaces';
 import { lastValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root', // Servicio singleton a nivel de aplicación
@@ -15,7 +16,7 @@ import { lastValueFrom } from 'rxjs';
 export class TurnosService {
 
   private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/api/turnos';
+  private url: string = `${environment.apiUrl}/api/turnos`;
 
   /**
    * GET /api/turnos

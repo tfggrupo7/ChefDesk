@@ -2,13 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ITareas } from '../../interfaces/itareas.interfaces';
 import { lastValueFrom } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TareasService {
   private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/api/tareas';
+  private url: string = `${environment.apiUrl}/api/tareas`;
 
   getTareas(): Promise<ITareas[]> {
     return lastValueFrom(this.httpClient.get<ITareas[]>(this.url));

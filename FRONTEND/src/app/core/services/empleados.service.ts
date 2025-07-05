@@ -5,13 +5,14 @@ import { lastValueFrom } from 'rxjs';
 import { IResponse } from '../../interfaces/iresponse.interfaces';
 import { Observable } from 'rxjs';
 import { AuthService } from '../../core/services/auth.service';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EmpleadosService {
   private httpClient = inject(HttpClient);
-  private url: string = 'http://localhost:3000/api/empleados';
+  private url: string = `${environment.apiUrl}/api/empleados`;
   private currentPage: number = 1;
   private limit: number = 10;
   private totalPages: number = 2;
@@ -83,21 +84,17 @@ export class EmpleadosService {
   cambiarContraseña(empleadoId: number, nuevaContraseña: string): Promise<any> {
     return lastValueFrom(
       this.httpClient.post(
-        `http://localhost:3000/api/empleados/cambiar-contrasena/${empleadoId}`,
+        `${environment.apiUrl}/api/empleados/cambiar-contrasena/${empleadoId}`,
         { nuevaContraseña }
       )
     );
   }
-
   getCurrentUser(): Promise<any> {
-
     const userId = this.authService.getEmpleadoId();
-
     if (!userId) {
       return Promise.reject(new Error('ID de empleado no válido'));
     }
-
-    const url = `http://localhost:3000/api/empleados/${userId}`;
+    const url = `${environment.apiUrl}/api/empleados/${userId}`;
     return lastValueFrom(this.httpClient.get(url));
   }
 }
