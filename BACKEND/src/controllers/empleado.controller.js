@@ -8,6 +8,7 @@ const sendEmail = require("../sendEmail");
 const { sendHtmlEmail } = require("../helper/welcome-email");
 
 // Login
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:4200';
 
 const login = async (req, res) => {
   const { email, password } = req.body;
@@ -67,7 +68,7 @@ const recuperarContraseña = async (req, res) => {
     }
 
     // 5. Envía el email con el token plano
-    const resetUrl = `http://localhost:4200/empleados/restablecer-contrasena/${token}`;
+    const resetUrl = `${FRONTEND_URL}/empleados/restablecer-contrasena/${token}`;
     const htmlTemplate = `
 <!DOCTYPE html>
 <html lang="es">
@@ -269,7 +270,7 @@ const create = async (req, res) => {
     <li>Ingresa tu email: <span class="font-mono text-blue-700">${email}</span></li>
     <li>Sigue las instrucciones para crear tu contraseña</li>
   </ol>
-  <a href="http://localhost:4200/empleados/login"
+  <a href="${FRONTEND_URL}/empleados/login"
      class="inline-block bg-green-600 text-white font-semibold px-4 py-2 rounded shadow hover:bg-green-700 transition">
     Ir a login
   </a>
