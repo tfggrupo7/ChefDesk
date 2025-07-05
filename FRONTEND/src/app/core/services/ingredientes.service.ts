@@ -11,7 +11,7 @@ import { environment } from '../../../environments/environment';
 export class IngredientesService {
 
   private httpClient = inject(HttpClient);
-  private url: string = `${environment.apiUrl}/api/ingredientes`;
+  private baseUrl = environment.apiUrl;
   private _totalItems = 0;
 
   get totalItems() { return this._totalItems; }
@@ -34,7 +34,7 @@ export class IngredientesService {
       .set('id', userId)
       .set('tipo', tipo);
 
-    return lastValueFrom(this.httpClient.get<any>(this.url, { params })).then(
+    return lastValueFrom(this.httpClient.get<any>(`${this.baseUrl}/ingredientes`, { params })).then(
       (resp) => {
         this._totalItems = resp.total;
         return resp.data as IIngredientes[];
@@ -46,27 +46,27 @@ export class IngredientesService {
     const params = new HttpParams()
       .set('tipo', tipo)
       .set('id', userId);
-    return lastValueFrom(this.httpClient.get<IIngredientes[]>(`${this.url}/all`, {params}));
+    return lastValueFrom(this.httpClient.get<IIngredientes[]>(`${this.baseUrl}/ingredientes/all`, {params}));
   }
 
   getIngredienteById(id: number): Promise<IIngredientes> {
-    return lastValueFrom(this.httpClient.get<IIngredientes>(`${this.url}/${id}`));
+    return lastValueFrom(this.httpClient.get<IIngredientes>(`${this.baseUrl}/ingredientes/${id}`));
   }
 
   getResumen(tipo: string, userId: string): Promise<IInventarioResumen> {
     const params = new HttpParams()
       .set('id', userId)
       .set('tipo', tipo);
-    return lastValueFrom(this.httpClient.get<IInventarioResumen>(`${this.url}/summary`, { params }));
+    return lastValueFrom(this.httpClient.get<IInventarioResumen>(`${this.baseUrl}/ingredientes/summary`, { params }));
   }
 
   createIngrediente(ingrediente: IIngredientes): Promise<IIngredientes> {
-    return lastValueFrom(this.httpClient.post<IIngredientes>(this.url, ingrediente));
+    return lastValueFrom(this.httpClient.post<IIngredientes>(`${this.baseUrl}/ingredientes`, ingrediente));
   }
   updateIngrediente(id: number, ingrediente: IIngredientes): Promise<IIngredientes> {
-    return lastValueFrom(this.httpClient.put<IIngredientes>(`${this.url}/${id}`, ingrediente));
+    return lastValueFrom(this.httpClient.put<IIngredientes>(`${this.baseUrl}/ingredientes/${id}`, ingrediente));
   }
   deleteIngrediente(id: number): Promise<void> {
-    return lastValueFrom(this.httpClient.delete<void>(`${this.url}/${id}`));
+    return lastValueFrom(this.httpClient.delete<void>(`${this.baseUrl}/ingredientes/${id}`));
   }
 }

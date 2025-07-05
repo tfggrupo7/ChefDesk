@@ -8,19 +8,19 @@ import { environment } from '../../../environments/environment';
 })
 export class InventariosService {
   private httpClient = inject(HttpClient);
-  private url: string = `${environment.apiUrl}/api/inventarios`;
+  private baseUrl = environment.apiUrl;
 
   getInventarios(): Promise<IInventarios[]> {
-    return lastValueFrom(this.httpClient.get<IInventarios[]>(this.url));
+    return lastValueFrom(this.httpClient.get<IInventarios[]>(`${this.baseUrl}/inventarios`));
   }
   getInventarioById(id: number): Promise<IInventarios> {
     return lastValueFrom(
-      this.httpClient.get<IInventarios>(`${this.url}/${id}`)
+      this.httpClient.get<IInventarios>(`${this.baseUrl}/inventarios/${id}`)
     );
   }
   createInventario(inventario: IInventarios): Promise<IInventarios> {
     return lastValueFrom(
-      this.httpClient.post<IInventarios>(this.url, inventario)
+      this.httpClient.post<IInventarios>(`${this.baseUrl}/inventarios`, inventario)
     );
   }
   updateInventario(
@@ -28,10 +28,10 @@ export class InventariosService {
     inventario: IInventarios
   ): Promise<IInventarios> {
     return lastValueFrom(
-      this.httpClient.put<IInventarios>(`${this.url}/${id}`, inventario)
+      this.httpClient.put<IInventarios>(`${this.baseUrl}/inventarios/${id}`, inventario)
     );
   }
   deleteInventario(id: number): Promise<void> {
-    return lastValueFrom(this.httpClient.delete<void>(`${this.url}/${id}`));
+    return lastValueFrom(this.httpClient.delete<void>(`${this.baseUrl}/inventarios/${id}`));
   }
 }

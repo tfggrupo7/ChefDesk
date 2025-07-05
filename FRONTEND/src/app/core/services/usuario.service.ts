@@ -16,6 +16,7 @@ export interface ILogin {
   providedIn: 'root'
 })
 export class UsuarioService {
+  private baseUrl = environment.apiUrl;
 
  
   httpClient = inject(HttpClient);
@@ -24,41 +25,41 @@ export class UsuarioService {
  
   login(usuario: IUsuario): Promise<IUsuario> {
     return lastValueFrom(
-      this.httpClient.post<IUsuario>(`${environment.apiUrl}/api/usuarios/login`, usuario, { observe: 'response' })
+      this.httpClient.post<IUsuario>(`${this.baseUrl}/usuarios/login`, usuario, { observe: 'response' })
     ).then(response => response.body as IUsuario);
   }
   register(usuario:IUsuario): Promise<IUsuario> {
-    return lastValueFrom(this.httpClient.post<IUsuario>(`${environment.apiUrl}/api/usuarios/registro`, usuario));
+    return lastValueFrom(this.httpClient.post<IUsuario>(`${this.baseUrl}/usuarios/registro`, usuario));
   }
   recuperarContrasena(email: string): Promise<void> {
-    return lastValueFrom(this.httpClient.post<void>(`${environment.apiUrl}/api/usuarios/recuperar-contrasena`, { email }));
+    return lastValueFrom(this.httpClient.post<void>(`${this.baseUrl}/usuarios/recuperar-contrasena`, { email }));
   }
 
   actualizarContrasena(token: string, nuevaContrasena: string): Promise<any> {
   const headers = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  return lastValueFrom(this.httpClient.post(`${environment.apiUrl}/api/usuarios/restablecer-contrasena/${token}`, { nuevaContrasena }, { headers }));
+  return lastValueFrom(this.httpClient.post(`${this.baseUrl}/usuarios/restablecer-contrasena/${token}`, { nuevaContrasena }, { headers }));
 }
 
 cambiarContraseña (token: string, nuevaContraseña: string): Promise<any> {
   const headers = new HttpHeaders({
     'Content-Type': 'application/json'
   });
-  return lastValueFrom(this.httpClient.post(`${environment.apiUrl}/api/usuarios/cambiar-contrasena/${token}`, { nuevaContraseña }, { headers }));
+  return lastValueFrom(this.httpClient.post(`${this.baseUrl}/usuarios/cambiar-contrasena/${token}`, { nuevaContraseña }, { headers }));
 }
 
 updateUsuario(usuario: IUsuario): Promise<IUsuario> {
   return lastValueFrom(
     this.httpClient.put<IUsuario>(
-      `${environment.apiUrl}/api/usuarios`,
+      `${this.baseUrl}/usuarios`,
       usuario
     )
   );
 }
 deleteUsuario(id: string): Promise<void> {
   return lastValueFrom(
-    this.httpClient.delete<void>(`${environment.apiUrl}/api/usuarios/${id}`)
+    this.httpClient.delete<void>(`${this.baseUrl}/usuarios/${id}`)
   );
 }
 
@@ -70,7 +71,7 @@ getCurrentUser(): Promise<any> {
     return Promise.reject(new Error('ID de usuario no válido'));
   }
 
-  const url = `${environment.apiUrl}/api/usuarios/${userId}`;
+  const url = `${this.baseUrl}/usuarios/${userId}`;
   return lastValueFrom(this.httpClient.get(url));
 }
 }

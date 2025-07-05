@@ -16,7 +16,7 @@ import { environment } from '../../../environments/environment';
 export class TurnosService {
 
   private httpClient = inject(HttpClient);
-  private url: string = `${environment.apiUrl}/api/turnos`;
+  private baseUrl = environment.apiUrl;
 
   /**
    * GET /api/turnos
@@ -31,7 +31,7 @@ export class TurnosService {
    
     // lastValueFrom convierte Observable en Promise<response>
     return lastValueFrom(
-      this.httpClient.get<{ data: ITurnos[] }>(this.url)
+      this.httpClient.get<{ data: ITurnos[] }>(`${this.baseUrl}/turnos`)
     ).then(r => r.data);
   }
 
@@ -45,7 +45,7 @@ export class TurnosService {
   getTurnosByDate(date: string): Promise<ITurnos[]> {
 
     return lastValueFrom(
-      this.httpClient.get<ITurnos[]>(`${this.url}/date/${date}`)
+      this.httpClient.get<ITurnos[]>(`${this.baseUrl}/turnos/date/${date}`)
     );
   }
 
@@ -58,7 +58,7 @@ export class TurnosService {
    * @returns Promise<ITurnos>
    */
   getTurnoById(id: number): Promise<ITurnos> {
-    return lastValueFrom(this.httpClient.get<ITurnos>(`${this.url}/${id}`));
+    return lastValueFrom(this.httpClient.get<ITurnos>(`${this.baseUrl}/turnos/${id}`));
   }
 
   /**
@@ -69,7 +69,7 @@ export class TurnosService {
    * @returns Promise<ITurnos> Registro creado
    */
   createTurno(turno: ITurnos): Promise<ITurnos> {
-    return lastValueFrom(this.httpClient.post<ITurnos>(this.url, turno));
+    return lastValueFrom(this.httpClient.post<ITurnos>(`${this.baseUrl}/turnos`, turno));
   }
 
   /**
@@ -82,7 +82,7 @@ export class TurnosService {
    */
   updateTurno(id: number, turno: ITurnos): Promise<ITurnos> {
     return lastValueFrom(
-      this.httpClient.put<ITurnos>(`${this.url}/${id}`, turno)
+      this.httpClient.put<ITurnos>(`${this.baseUrl}/turnos/${id}`, turno)
     );
   }
 
@@ -98,23 +98,23 @@ export class TurnosService {
 
     return lastValueFrom(
       this.httpClient.delete<{ message: string; data: ITurnos[] }>(
-        `${this.url}/${id}`
+        `${this.baseUrl}/turnos/${id}`
     )
   )
   }
 
   getTurnosByEmpleado(empleadoId: number): Promise<ITurnos[]> {
-  return lastValueFrom (this.httpClient.get<ITurnos[]>(`${this.url}/empleado/${empleadoId}`));
+  return lastValueFrom (this.httpClient.get<ITurnos[]>(`${this.baseUrl}/turnos/empleado/${empleadoId}`));
 }
 
   // En tu turnosService
 getTurnosByDateAndEmpleado(fecha: string, empleadoId: number): Promise<ITurnos[]> {
-  return lastValueFrom(this.httpClient.get<ITurnos[]>(`${this.url}/fecha/${fecha}/empleado/${empleadoId}`));
+  return lastValueFrom(this.httpClient.get<ITurnos[]>(`${this.baseUrl}/turnos/fecha/${fecha}/empleado/${empleadoId}`));
 }
  sendTurnosByEmail(turnos: ITurnos[]): Promise<void> {
     return lastValueFrom(
       this.httpClient.post<void>(
-        `${this.url}/send/pdf`,
+        `${this.baseUrl}/turnos/send/pdf`,
         { turnos }
       )
     );
@@ -122,28 +122,28 @@ getTurnosByDateAndEmpleado(fecha: string, empleadoId: number): Promise<ITurnos[]
   sendTurnosEmpleadoByEmail(empleadoId: number, email: string): Promise<void> {
     return lastValueFrom(
       this.httpClient.post<void>(
-        `${this.url}/empleado/${empleadoId}/send/pdf`,
+        `${this.baseUrl}/turnos/empleado/${empleadoId}/send/pdf`,
         { empleadoId, email }
       )
     );
   }
   downloadTurnos(): Promise<Blob> {
     return lastValueFrom(
-      this.httpClient.get(`${this.url}/export/pdf`, {
+      this.httpClient.get(`${this.baseUrl}/turnos/export/pdf`, {
         responseType: 'blob'
       })
     );
   }
   downloadTurnosPorId(empleadoId: number): Promise<Blob> {
     return lastValueFrom(
-      this.httpClient.get(`${this.url}/empleado/${empleadoId}/pdf`, {
+      this.httpClient.get(`${this.baseUrl}/turnos/empleado/${empleadoId}/pdf`, {
         responseType: 'blob'
       })
     );
   }
   getTurnosAndEmpleadoById(id: number): Promise<ITurnos[]> {
       return lastValueFrom(
-        this.httpClient.get<ITurnos[]>(`${this.url}/empleado/${id}`)
+        this.httpClient.get<ITurnos[]>(`${this.baseUrl}/turnos/empleado/${id}`)
       );
     }
 }

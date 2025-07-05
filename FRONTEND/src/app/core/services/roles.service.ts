@@ -10,24 +10,24 @@ import { environment } from '../../../environments/environment';
 export class RolesService {
 
   private httpClient = inject(HttpClient);
-  private url: string = `${environment.apiUrl}/api/roles`;
+  private baseUrl = environment.apiUrl;
 
   getRoles(): Promise<IRoles[]> {
 
     return lastValueFrom(
-      this.httpClient.get<IRoles[]>(this.url)
+      this.httpClient.get<IRoles[]>(`${this.baseUrl}/roles`)
     );
   }
   getRoleById(id: number): Promise<IRoles> {
-    return lastValueFrom(this.httpClient.get<IRoles>(`${this.url}/${id}`));
+    return lastValueFrom(this.httpClient.get<IRoles>(`${this.baseUrl}/roles/${id}`));
   }
   createRole(role: IRoles): Promise<IRoles> {
-    return lastValueFrom(this.httpClient.post<IRoles>(this.url, role));
+    return lastValueFrom(this.httpClient.post<IRoles>(`${this.baseUrl}/roles`, role));
   }
   updateRole(id: number, role: IRoles): Promise<IRoles> {
-    return lastValueFrom(this.httpClient.put<IRoles>(`${this.url}/${id}`, role));
+    return lastValueFrom(this.httpClient.put<IRoles>(`${this.baseUrl}/roles/${id}`, role));
   }
   deleteRole(id: number): Promise<void> {
-    return lastValueFrom(this.httpClient.delete<void>(`${this.url}/${id}`));
+    return lastValueFrom(this.httpClient.delete<void>(`${this.baseUrl}/roles/${id}`));
   }
 }

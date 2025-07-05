@@ -9,34 +9,34 @@ import { environment } from '../../../environments/environment';
 })
 export class TareasService {
   private httpClient = inject(HttpClient);
-  private url: string = `${environment.apiUrl}/api/tareas`;
+  private baseUrl = environment.apiUrl;
 
   getTareas(): Promise<ITareas[]> {
-    return lastValueFrom(this.httpClient.get<ITareas[]>(this.url));
+    return lastValueFrom(this.httpClient.get<ITareas[]>(`${this.baseUrl}/tareas`));
   }
   getTareasAndEmpleadoById(id: number): Promise<ITareas[]> {
     return lastValueFrom(
-      this.httpClient.get<ITareas[]>(`${this.url}/empleado/${id}`)
+      this.httpClient.get<ITareas[]>(`${this.baseUrl}/tareas/empleado/${id}`)
     );
   }
   getTareaById(id: number): Promise<ITareas> {
-    return lastValueFrom(this.httpClient.get<ITareas>(`${this.url}/${id}`));
+    return lastValueFrom(this.httpClient.get<ITareas>(`${this.baseUrl}/tareas/${id}`));
   }
   createTarea(tarea: ITareas): Promise<ITareas> {
-    return lastValueFrom(this.httpClient.post<ITareas>(this.url, tarea));
+    return lastValueFrom(this.httpClient.post<ITareas>(`${this.baseUrl}/tareas`, tarea));
   }
   updateTarea(id: number, tarea: ITareas): Promise<ITareas> {
     return lastValueFrom(
-      this.httpClient.put<ITareas>(`${this.url}/${id}`, tarea)
+      this.httpClient.put<ITareas>(`${this.baseUrl}/tareas/${id}`, tarea)
     );
   }
   deleteTarea(id: number): Promise<void> {
-    return lastValueFrom(this.httpClient.delete<void>(`${this.url}/${id}`));
+    return lastValueFrom(this.httpClient.delete<void>(`${this.baseUrl}/tareas/${id}`));
   }
   sendTareasByEmail(tareas: ITareas[]): Promise<void> {
     return lastValueFrom(
       this.httpClient.post<void>(
-        `${this.url}/send/pdf`,
+        `${this.baseUrl}/tareas/send/pdf`,
         { tareas }
       )
     );
@@ -44,7 +44,7 @@ export class TareasService {
   sendTareasEmpleadoByEmail(empleadoId: number, email: string): Promise<void> {
     return lastValueFrom(
       this.httpClient.post<void>(
-        `${this.url}/empleado/${empleadoId}/send/pdf`,
+        `${this.baseUrl}/tareas/empleado/${empleadoId}/send/pdf`,
         { empleadoId, email }
       )
     );
@@ -52,14 +52,14 @@ export class TareasService {
   downloadTareas(): Promise<Blob> {
     const token = localStorage.getItem('token');
     return lastValueFrom(
-      this.httpClient.get(`${this.url}/export/pdf`, {
+      this.httpClient.get(`${this.baseUrl}/tareas/export/pdf`, {
         responseType: 'blob'
       })
     );
   }
   downloadTareasPorId(empleadoId: number): Promise<Blob> {
     return lastValueFrom(
-      this.httpClient.get(`${this.url}/empleado/${empleadoId}/pdf`, {
+      this.httpClient.get(`${this.baseUrl}/tareas/empleado/${empleadoId}/export/pdf`, {
         responseType: 'blob'
       })
     );
