@@ -7,7 +7,10 @@ const { swaggerUi, swaggerSpec } = require('../swagger');
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://chef-desk.vercel.app',
+  credentials: true
+}));
 const tareasRoutes = require("./routes/api/tareas.routes");
 const dialogflowRoutes = require("./routes/api/dialogflow.routes");
 app.use('/api/tareas', tareasRoutes);
