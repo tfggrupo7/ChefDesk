@@ -1,0 +1,149 @@
+<div class="bg-[#556B2F]/10 p-4 rounded-lg border-l-4 border-[#556B2F] mb-4">
+  <h1 class="text-2xl font-bold text-[#556B2F]">
+    Panel de Control
+  </h1>
+  <p class="text-[#1C1C1C]/70">Resumen general de tu cocina</p>
+</div>
+
+<div class="grid gap-6 lg:grid-cols-2 mb-4">
+  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20 flex flex-col h-full"
+    data-v0-t="card">
+    <div class="flex flex-col space-y-1.5 p-6">
+      <h3
+        class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F] flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-clipboard-list h-5 w-5">
+          <rect width="8" height="4" x="8" y="2" rx="1" ry="1"></rect>
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+          <path d="M12 11h4"></path>
+          <path d="M12 16h4"></path>
+          <path d="M8 11h.01"></path>
+          <path d="M8 16h.01"></path>
+        </svg>Inventario Crítico
+      </h3>
+      <p class="text-sm text-muted-foreground">
+        Productos que requieren atención inmediata
+      </p>
+    </div>
+    <div class="p-6 pt-0 space-y-3">
+      @for(ingrediente of arrIngredientes | slice:0:5; track ingrediente.id) {
+        <div class="flex justify-between items-center p-3 rounded-lg bg-[#556B2F]/5">
+          <div>
+            <p class="font-medium text-[#1C1C1C]">
+              {{ingrediente.nombre}}
+            </p>
+            <p class="text-sm text-[#1C1C1C]/70">{{ingrediente.cantidad}} {{ingrediente.unidad}} restantes</p>
+          </div>
+          <span class="text-xs px-2 py-1 rounded-full bg-red-100 text-red-800">{{ingrediente.estado}}</span>
+        
+        </div>
+      }
+        
+      <button
+        class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 w-full bg-[#556B2F] hover:bg-[#556B2F]/90">
+        <a href="/dashboard-empleados/inventario-empleados">Ver Todo el Inventario</a>
+      </button>
+    </div>
+  </div>
+  <div class="rounded-lg border bg-card text-card-foreground shadow-sm border-[#D4AF37]/20  flex flex-col h-full"
+    data-v0-t="card">
+    <div class="flex flex-col space-y-1.5 p-6">
+      <h3
+        class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F] flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-users h-5 w-5">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+          <circle cx="9" cy="7" r="4"></circle>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+        </svg>Turnos de Hoy
+      </h3>
+      <p class="text-sm text-muted-foreground">{{ todayFormatted }}</p>
+     
+    </div>
+    <div class="p-6 pt-0 space-y-3">
+    @if(turnos.length ) {
+   
+    @for (turno of turnos | slice:0:5; let i = $index; track turno.id) {
+      <div 
+        class="flex justify-between items-center p-4 rounded-lg bg-[#556B2F]/5 border border-[#D4AF37]/10"
+        [ngClass]="i < turnos.length - 1 ? 'mb-[5px]' : ''">
+        <div>
+          <div class="font-medium text-[#1C1C1C]">
+            {{ empleadosMap.get(turno.empleado_id) || 'Empleado ' + turno.empleado_id }}
+          </div>
+         
+        </div>
+        <div class="text-right">
+          <div class="font-medium text-[#556B2F]">{{ turno.hora_inicio | slice:0:5 }} - {{ turno.hora_fin | slice:0:5 }}</div>
+          <p class="text-sm text-[#1C1C1C]/70">
+            {{ calcularDuracion(turno.hora_inicio, turno.hora_fin) | number:'1.0-2' }} horas
+          </p>
+        </div>
+        <div class="text-xs rounded-full px-2 py-1 font-medium" [ngClass]="getEstadoClase(getEstadoAutomatico(turno))">
+          {{ getEstadoAutomatico(turno) | titlecase }}
+         
+        </div>
+      </div>
+    }
+    } @else {
+      <div class="text-center text-[#1C1C1C]/70">No hay turnos programados para hoy</div>
+    }
+         
+  
+
+         <button
+        class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none text-white h-10 py-2 px-4 w-full bg-[#556B2F] hover:bg-[#556B2F]/90">
+        <a href="/dashboard-empleados/turnos-empleados">Gestionar Turnos</a>
+      </button>
+    </div>
+</div>
+</div>
+<div class="rounded-lg border bg-card text-card-foreground mb-4 shadow-sm border-[#D4AF37]/20"
+  data-v0-t="card">
+  <div class="flex flex-col space-y-1.5 p-6">
+    <h3 class="text-2xl font-semibold leading-none tracking-tight text-[#556B2F]">
+      Accesos Rápidos
+    </h3>
+    <p class="text-sm text-muted-foreground">
+      Funciones más utilizadas
+    </p>
+  </div>
+  <div class="p-6 pt-0">
+    <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3">
+      <button
+        class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 py-2 px-4 h-20 flex-col gap-2 border-[#556B2F] text-[#556B2F]">
+        <a href="/dashboard-empleados/inventario-empleados" class="inline-flex flex-col gap-2 items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="lucide lucide-package h-6 w-6">
+            <path d="m7.5 4.27 9 5.15"></path>
+            <path
+              d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z">
+            </path>
+            <path d="m3.3 7 8.7 5 8.7-5"></path>
+            <path d="M12 22V12"></path>
+          </svg><span>Ver Inventario</span></a></button><button
+         class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 py-2 px-4 h-20 flex-col gap-2 border-[#556B2F] text-[#556B2F]">
+        <a href="/dashboard-empleados/turnos-empleados" class="inline-flex flex-col gap-2 items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="lucide lucide-calendar h-6 w-6">
+            <path d="M8 2v4"></path>
+            <path d="M16 2v4"></path>
+            <rect width="18" height="18" x="3" y="4" rx="2"></rect>
+            <path d="M3 10h18"></path>
+          </svg><span>Ver Turnos</span></a></button><button
+        class="inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#556B2F] disabled:opacity-50 disabled:pointer-events-none border hover:bg-[#556B2F]/10 py-2 px-4 h-20 flex-col gap-2 border-[#556B2F] text-[#556B2F]">
+        <a href="/dashboard-empleados/tareas-empleados" class="inline-flex flex-col gap-2 items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" class="lucide lucide-bar-chart3 h-6 w-6">
+            <path d="M3 3v18h18"></path>
+            <path d="M18 17V9"></path>
+            <path d="M13 17V5"></path>
+            <path d="M8 17v-3"></path>
+          </svg><span>Ver Tareas</span></a>
+      </button>
+    </div>
+  </div>
+</div>
