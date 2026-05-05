@@ -27,7 +27,7 @@ async function wellcome(to, subject, text) {
 // Función para enviar emails con HTML
 async function sendHtmlEmail(to, subject, html) {
   const mailOptions = {
-    from: '"ChefDesk" <waltra2@gmail.com>',
+    from: '"ChefDesk" <>',
     to,
     subject,
     html, 
