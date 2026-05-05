@@ -4,8 +4,7 @@ module.exports = async function sendEmail(to, subject, text, htmlTemplate) {
   const transporter = nodemailer.createTransport({
     service: 'Gmail',
     auth: {
-      user: 'waltra2@gmail.com',
-      pass: 'fafs oorf tncb hgeu'
+      
     },
     tls: {
     rejectUnauthorized: false
