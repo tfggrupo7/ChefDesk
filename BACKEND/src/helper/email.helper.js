@@ -6,8 +6,7 @@ async function sendTareasEmail(to, subject, text, attachmentPath) {
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "waltra2@gmail.com",
-      pass: "fafs oorf tncb hgeu",
+    
     },
     tls: {
       rejectUnauthorized: false,
